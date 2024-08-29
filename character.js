@@ -232,7 +232,7 @@ export class Supporter1 {
         return 40 + this.grade * 40;
     }
     get attackpower() {
-        return 7 + this.grade * 7;
+        return 8 + this.grade * 8;
     }
     get defense() {
         return 14 + this.grade * 7;
