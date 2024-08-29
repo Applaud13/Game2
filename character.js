@@ -110,9 +110,9 @@ export class Tanker2 {
             this.BattletimeUse += this.skillcool;
             // const Deal = Math.ceil((0.8 + Math.random() * 0.4) * this.attackpower)
             const Deal = MyMath .damgecalculate(this.attackpower , monster.defense);
-            monster.BattletimeUse += 1000;
+            monster.BattletimeUse += 700 + this.grade * 100;
             monster.hp -= Deal;
-            logs.push(`${chalk.blue(`${this.name}`)}가 ${chalk.red(`${monster.name}`)}에게 ${chalk.blue(`천공의 검`)}을 사용하여 ${chalk.red(`1`)}초간 스턴을 가하고 ${chalk.red(`${Deal}의 피해를 입혔습니다.`)}!`);
+            logs.push(`${chalk.blue(`${this.name}`)}가 ${chalk.red(`${monster.name}`)}에게 ${chalk.blue(`천공의 검`)}을 사용하여 ${chalk.red(`${(7+this.grade)/10}`)}초간 스턴을 가하고 ${chalk.red(`${Deal}의 피해를 입혔습니다.`)}!`);
         }
     }
 
@@ -239,7 +239,7 @@ export class Supporter1 {
     }
 
 
-    //공격력만큼 살아있는 아군 모두를 치유한 후 공격력만큼 상대에게 피해를 가함
+    //살아있는 아군 모두를 치유한 후 상대에게 피해를 가함
     skill = function (Battletime, logs, player, monster) {
         if (Battletime > this.skillcool + this.BattletimeUse && this.hp > 0) {
 
@@ -250,7 +250,7 @@ export class Supporter1 {
 
             // 힐 적용
             this.BattletimeUse += this.skillcool;
-            const Heal = Math.ceil(MyMath.randomN(this.attackpower) * 1);
+            const Heal = Math.ceil(MyMath.randomN(this.attackpower) * 0.7);
             player.Firstcharacter.hp > 0 ? player.Firstcharacter.hp += Math.min(Heal, player.Firstcharacter.Maxhp - player.Firstcharacter.hp) : null;
             player.Secondcharacter.hp > 0 ? player.Secondcharacter.hp += Math.min(Heal, player.Secondcharacter.Maxhp - player.Secondcharacter.hp) : null;
             player.Thirdcharacter.hp > 0 ? player.Thirdcharacter.hp += Math.min(Heal, player.Thirdcharacter.Maxhp - player.Thirdcharacter.hp) : null;
@@ -293,7 +293,7 @@ export class Supporter2 {
     }
 
 
-    //공격력의 1배만큼 살아있는 아군 중 현재 체력비율이 가장낮은 아군을 치유하고 적에게 공격력의 1.5배만큼 피해
+    //살아있는 아군 중 현재 체력비율이 가장낮은 아군을 치유하고 적에게 피해를 가함
     skill = function (Battletime, logs, player, monster) {
         if (Battletime > this.skillcool + this.BattletimeUse && this.hp > 0) {
 
@@ -304,7 +304,7 @@ export class Supporter2 {
 
             // 체력 비율이 낮은 아군을 찾아 힐 시전
             this.BattletimeUse += this.skillcool;
-            const Heal = Math.ceil(MyMath.randomN(this.attackpower) * 1);
+            const Heal = Math.ceil(MyMath.randomN(this.attackpower) * 0.7);
             const HPrate1 = player.Firstcharacter.hp / player.Firstcharacter.Maxhp;
             const HPrate2 = player.Secondcharacter.hp / player.Secondcharacter.Maxhp;
             const HPrate3 = player.Thirdcharacter.hp / player.Thirdcharacter.Maxhp;
