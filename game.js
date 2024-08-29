@@ -130,8 +130,8 @@ async function battle (stage, player, monster) {
     displayStatus(stage, player, monster);
 
 
-    // 로그는 21개까지만 노출
-    if (logs.length > 21) {
+    // 로그는 20개까지만 노출
+    if (logs.length > 20) {
       logs.shift();
     }
     logs.forEach(log => { console.log(log); });
