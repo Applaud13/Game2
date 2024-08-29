@@ -2,6 +2,7 @@ import chalk from "chalk";
 import wavPlayer from 'node-wav-player';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { MyMath  } from "./mymath.js";
 
 
 // 현재 파일의 디렉토리 경로 (사운드 관련)
@@ -22,6 +23,7 @@ export class Player {
 
 // 루시우스 (받는 피해량 반감)
 export class Tanker1 {
+
     constructor() {
         this.name = `루시우스`;
         this.grade = 1;
@@ -32,6 +34,18 @@ export class Tanker1 {
         this.Bufftime = 0;
         this.BattletimeUse = -this.skillcool / 2;
     }
+
+
+    get Maxhp() {
+        return 60 + this.grade * 60;
+    }
+    get attackpower() {
+        return 6 + this.grade * 6;
+    }
+    get defense() {
+        return 22 + this.grade * 11;
+    }
+
 
     // 자신에게 대미지 지속시간동안 대미지를 반감 시켜주는 버프발동 및 공격력의 피해
     skill = function (Battletime, logs, player, monster) {
@@ -47,20 +61,14 @@ export class Tanker1 {
 
             // 스킬 효과
             this.BattletimeUse += this.skillcool;
-            const Deal = Math.ceil((0.8 + (Math.random() * 0.4)) * this.attackpower);
+            // const Deal = Math.ceil((0.8 + (Math.random() * 0.4)) * this.attackpower);
+            const Deal = MyMath .damgecalculate(this.attackpower, monster.defense);
             this.Bufftime = 3500;
             monster.hp -= Deal;
             logs.push(`${chalk.blue(`${this.name}`)}가 ${chalk.blue(`신성한 축복`)}을 시전하여 ${chalk.red(`${monster.name}`)}에게 ${chalk.red(`${Deal}`)}의 피해를 입히고 ${chalk.green(`${this.Bufftime / 1000}`)}초 동안 본인이 받는피해가 반으로 줄어듭니다!!`);
         }
     }
 
-
-    get Maxhp() {
-        return 60 + this.grade * 60;
-    }
-    get attackpower() {
-        return 6 + this.grade * 6;
-    }
 }
 
 
@@ -78,6 +86,17 @@ export class Tanker2 {
     }
 
 
+    get Maxhp() {
+        return 65 + this.grade * 65;
+    }
+    get attackpower() {
+        return 7 + this.grade * 7;
+    }
+    get defense() {
+        return 21 + this.grade * 11;
+    }
+
+
     // 상대에게 1초간 스턴을 가하고 공격력의 피해를 가함
     skill = function (Battletime, logs, player, monster) {
         if (Battletime > this.skillcool + this.BattletimeUse && this.hp > 0) {
@@ -89,20 +108,14 @@ export class Tanker2 {
 
             // 스킬 효과
             this.BattletimeUse += this.skillcool;
-            const Deal = Math.ceil((0.8 + Math.random() * 0.4) * this.attackpower)
+            // const Deal = Math.ceil((0.8 + Math.random() * 0.4) * this.attackpower)
+            const Deal = MyMath .damgecalculate(this.attackpower , monster.defense);
             monster.BattletimeUse += 1000;
             monster.hp -= Deal;
             logs.push(`${chalk.blue(`${this.name}`)}가 ${chalk.red(`${monster.name}`)}에게 ${chalk.blue(`천공의 검`)}을 사용하여 ${chalk.red(`1`)}초간 스턴을 가하고 ${chalk.red(`${Deal}의 피해를 입혔습니다.`)}!`);
         }
     }
 
-
-    get Maxhp() {
-        return 65 + this.grade * 65;
-    }
-    get attackpower() {
-        return 7 + this.grade * 7;
-    }
 }
 
 
@@ -120,6 +133,17 @@ export class Dealer1 {
     }
 
 
+    get Maxhp() {
+        return 35 + this.grade * 35;
+    }
+    get attackpower() {
+        return 12 + this.grade * 12;
+    }
+    get defense() {
+        return 16 + this.grade * 8;
+    }
+    
+
     // 공격력 절반의 피해를 1~6번 랜덤하게 가함
     skill = function (Battletime, logs, player, monster) {
         if (Battletime > this.skillcool + this.BattletimeUse && this.hp > 0) {
@@ -132,19 +156,13 @@ export class Dealer1 {
             // 스킬 효과
             this.BattletimeUse += this.skillcool;
             const Luck = Math.floor(Math.random() * 6 + 1);
-            const Deal = Math.ceil((0.8 + Math.random() * 0.4) * this.attackpower * 0.5);
+            // const Deal = Math.ceil((0.8 + Math.random() * 0.4) * this.attackpower * 0.5);
+            const Deal = MyMath .damgecalculate(this.attackpower * 0.5, monster.defense);
             monster.hp -= Deal * Luck;
             logs.push(`행운의 주사위에서${chalk.blue(`${Luck}`)}의 숫자가 나왔습니다. ${chalk.blue(`${this.name}`)}가 ${chalk.red(`${monster.name}`)}에게 ${chalk.red(`${Deal}`)}의 피해를${chalk.red(`${Luck}`)}번 가하였습니다!!`);
         }
     }
 
-
-    get Maxhp() {
-        return 35 + this.grade * 35;
-    }
-    get attackpower() {
-        return 12 + this.grade * 12;
-    }
 }
 
 
@@ -163,6 +181,17 @@ export class Dealer2 {
     }
 
 
+    get Maxhp() {
+        return 40 + this.grade * 40;
+    }
+    get attackpower() {
+        return 10 + this.grade * 10;
+    }
+    get defense() {
+        return 17 + this.grade * 9;
+    }
+
+
     //공격력 + 보스 최대체력5% 만큼의 피해를 가함
     skill = function (Battletime, logs, player, monster) {
         if (Battletime > this.skillcool + this.BattletimeUse && this.hp > 0) {
@@ -174,19 +203,13 @@ export class Dealer2 {
 
             // 스킬 효과
             this.BattletimeUse += this.skillcool;
-            const Deal = Math.ceil((0.8 + Math.random() * 0.4) * this.attackpower * 1 + monster.Maxhp * 0.05);
+            // const Deal = Math.ceil((0.8 + Math.random() * 0.4) * (this.attackpower * 1 + monster.Maxhp * 0.05));
+            const Deal = MyMath.damgecalculate(this.attackpower + monster.Maxhp * 0.05, monster.defense);
             monster.hp -= Deal;
             logs.push(`${chalk.blue(`${this.name}`)}가 ${chalk.blue(`녹아내린 균열`)}을 사용하여 ${chalk.red(`${monster.name}`)}에게 ${chalk.red(`${Deal}`)}의 피해를 입혔습니다.`);
         }
     }
 
-
-    get Maxhp() {
-        return 40 + this.grade * 40;
-    }
-    get attackpower() {
-        return 10 + this.grade * 10;
-    }
 }
 
 
@@ -205,6 +228,17 @@ export class Supporter1 {
     }
 
 
+    get Maxhp() {
+        return 40 + this.grade * 40;
+    }
+    get attackpower() {
+        return 7 + this.grade * 7;
+    }
+    get defense() {
+        return 14 + this.grade * 7;
+    }
+
+
     //공격력만큼 살아있는 아군 모두를 치유한 후 공격력만큼 상대에게 피해를 가함
     skill = function (Battletime, logs, player, monster) {
         if (Battletime > this.skillcool + this.BattletimeUse && this.hp > 0) {
@@ -216,26 +250,20 @@ export class Supporter1 {
 
             // 힐 적용
             this.BattletimeUse += this.skillcool;
-            const Heal = Math.ceil((0.8 + Math.random() * 0.4) * this.attackpower * 1);
+            const Heal = Math.ceil(MyMath.randomN(this.attackpower) * 1);
             player.Firstcharacter.hp > 0 ? player.Firstcharacter.hp += Math.min(Heal, player.Firstcharacter.Maxhp - player.Firstcharacter.hp) : null;
             player.Secondcharacter.hp > 0 ? player.Secondcharacter.hp += Math.min(Heal, player.Secondcharacter.Maxhp - player.Secondcharacter.hp) : null;
             player.Thirdcharacter.hp > 0 ? player.Thirdcharacter.hp += Math.min(Heal, player.Thirdcharacter.Maxhp - player.Thirdcharacter.hp) : null;
 
 
             // 딜 적용
-            const Deal = Math.ceil(this.attackpower * 1);
+            // const Deal = Math.ceil(this.attackpower * 1);
+            const Deal = MyMath.damgecalculate(this.attackpower, monster.defense);
             monster.hp -= Deal;
             logs.push(`${chalk.blue(`${this.name}`)}가 ${chalk.blue(`별의 기원`)}을 사용하여 ${chalk.blue(`아군모두`)}의 체력을${chalk.green(`${Heal}`)}만큼 회복시키고 ${chalk.red(`${monster.name}`)}에게 ${chalk.red(`${Deal}`)}의 피해를 입혔습니다!!`);
         }
     }
 
-
-    get Maxhp() {
-        return 40 + this.grade * 40;
-    }
-    get attackpower() {
-        return 8 + this.grade * 8;
-    }
 }
 
 
@@ -252,6 +280,17 @@ export class Supporter2 {
         this.Bufftime = 0;
         this.BattletimeUse = -this.skillcool / 2;
     }
+   
+    
+    get Maxhp() {
+        return 40 + this.grade * 40;
+    }
+    get attackpower() {
+        return 9 + this.grade * 9;
+    }
+    get defense() {
+        return 15 + this.grade * 8;
+    }
 
 
     //공격력의 1배만큼 살아있는 아군 중 현재 체력비율이 가장낮은 아군을 치유하고 적에게 공격력의 1.5배만큼 피해
@@ -265,7 +304,7 @@ export class Supporter2 {
 
             // 체력 비율이 낮은 아군을 찾아 힐 시전
             this.BattletimeUse += this.skillcool;
-            const Heal = Math.ceil((0.8 + Math.random() * 0.4) * this.attackpower * 1);
+            const Heal = Math.ceil(MyMath.randomN(this.attackpower) * 1);
             const HPrate1 = player.Firstcharacter.hp / player.Firstcharacter.Maxhp;
             const HPrate2 = player.Secondcharacter.hp / player.Secondcharacter.Maxhp;
             const HPrate3 = player.Thirdcharacter.hp / player.Thirdcharacter.Maxhp;
@@ -282,16 +321,10 @@ export class Supporter2 {
                 DangerousName = player.Thirdcharacter.name;
             }
             // 공격력의 1.5배 딜 시전
-            const Deal = Math.ceil(this.attackpower * 1.5);
+            // const Deal = Math.ceil(this.attackpower * 1.5);
+            const Deal = MyMath.damgecalculate(this.attackpower * 1.5, monster.defense);
             logs.push(`${chalk.blue(`${this.name}`)}가 파도의 축복을 사용하여 ${chalk.blue(`${DangerousName}`)} 체력을${chalk.green(`${Heal}`)}만큼 회복시키고 ${chalk.red(`${monster.name}`)}에게 ${chalk.red(`${Deal}`)}의 피해를 입혔습니다!!`);
         }
     }
 
-    
-    get Maxhp() {
-        return 40 + this.grade * 40;
-    }
-    get attackpower() {
-        return 9 + this.grade * 9;
-    }
 }

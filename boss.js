@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { MyMath  } from "./mymath.js";
 
 
 // 강한 공격을 가하는 보스 (그림자 처형자)
@@ -10,6 +11,7 @@ export class Boss1 {
         this.skillcool = 700;
         this.BattletimeUse = -350;
         this.attackpower = 7 + stage * 3;
+        this.defense = 11 + stage * 4.5;
     }
 
 
@@ -21,18 +23,21 @@ export class Boss1 {
 
 
             // 스킬 : 타겟 1명에게 피해를 가함
-            let Deal = Math.floor((0.8 + Math.random() * 0.4) * this.attackpower);
+            let Deal;
 
 
             // 살아있는 가장 가까운 적을 타겟으로 함
             let Target = player.Thirdcharacter;
+            Deal = MyMath.damgecalculate(this.attackpower, player.Thirdcharacter.defense);
             if (player.Firstcharacter.hp > 0) {
                 Target = player.Firstcharacter;
+                Deal = MyMath.damgecalculate(this.attackpower, player.Firstcharacter.defense);
                 if (Target.Bufftime>0) {
                     Deal = Math.floor(Deal * 0.5);
                 }
             } else if (player.Secondcharacter.hp > 0) {
                 Target = player.Secondcharacter;
+                Deal = MyMath.damgecalculate(this.attackpower, player.Secondcharacter.defense);
             }
 
             // 최종 공격 실행
@@ -52,6 +57,7 @@ export class Boss2 {
         this.skillcool = 600;
         this.BattletimeUse = -300;
         this.attackpower = 6 + 2.5 * stage;
+        this.defense = 13 + stage * 5;
     }
 
 
@@ -63,17 +69,20 @@ export class Boss2 {
 
 
             // 스킬 : 타겟 1명에게 피해를 가함
-            let Deal = Math.floor((0.8 + Math.random() * 0.4) * this.attackpower);
+            let Deal;
 
 
             // 살아있는 가장 가까운 적을 타겟으로 함
             let Target = player.Thirdcharacter;
+            Deal = MyMath.damgecalculate(this.attackpower, player.Thirdcharacter.defense);
             if (player.Firstcharacter.hp > 0) {
                 Target = player.Firstcharacter;
+                Deal = MyMath.damgecalculate(this.attackpower, player.Firstcharacter.defense);
                 if (Target.Bufftime>0) {
                     Deal = Math.floor(Deal * 0.5);
                 }
             } else if (player.Secondcharacter.hp > 0) {
+                Deal = MyMath.damgecalculate(this.attackpower, player.Secondcharacter.defense);
                 Target = player.Secondcharacter;
             }
 
@@ -93,7 +102,8 @@ export class Boss3 {
         this.hp = 180 + stage * 70;
         this.skillcool = 800;
         this.BattletimeUse = -400;
-        this.attackpower = 9 + stage * 4;
+        this.attackpower = 10 + stage * 4;
+        this.defense = 10 + stage * 4;
     }
 
 
@@ -105,14 +115,16 @@ export class Boss3 {
 
 
             // 스킬 : 모든 적에게 피해를 가함
-            let Deal = Math.floor((0.8 + Math.random() * 0.4) * this.attackpower * 0.5);
-
+            let FirstDeal = MyMath.damgecalculate(this.attackpower * 0.5, player.Firstcharacter.defense);
+            let SecondDeal = MyMath.damgecalculate(this.attackpower * 0.5, player.Secondcharacter.defense);
+            let ThirdDeal = MyMath.damgecalculate(this.attackpower * 0.5, player.Thirdcharacter.defense);
+            let Deal = Math.ceil((FirstDeal + SecondDeal + ThirdDeal) / 3)
 
             // 최종 공격 실행
-            player.Firstcharacter.Bufftime>0 ? player.Firstcharacter.hp -= Math.floor(Deal/2) : player.Firstcharacter.hp -= Deal;
-            player.Secondcharacter.hp -= Deal;
-            player.Thirdcharacter.hp -= Deal;
-            logs.push(`${chalk.red(`${this.name}`)}이 멸망의 파도를 사용하여 ${chalk.blue(`아군 모두`)}에게 ${chalk.red(`${Deal}`)}의 피해를 입혔습니다.`);
+            player.Firstcharacter.Bufftime>0 ? player.Firstcharacter.hp -= FirstDeal * 0.5 : player.Firstcharacter.hp -= FirstDeal;
+            player.Secondcharacter.hp -= SecondDeal;
+            player.Thirdcharacter.hp -= ThirdDeal;
+            logs.push(`${chalk.red(`${this.name}`)}이 멸망의 파도를 사용하여 ${chalk.blue(`아군 모두`)}에게 약${chalk.red(`${Deal}`)}의 피해를 입혔습니다.`);
         }
     }
 }

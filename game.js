@@ -55,12 +55,14 @@ export async function startGame() {
 
     // 전투
     await battle(stage, player, monster);
-    stage++;
 
 
     // 승리 로딩
     await Moveshop(player, stage);
 
+
+    stage++;
+    
   }
 
   end(stage - 1);
@@ -170,13 +172,13 @@ function displayStatus(stage, player, monster) {
   console.log(chalk.magentaBright(`\n=== Current Status ===`));
   console.log(
     chalk.blueBright(
-      `| ${player.Firstcharacter.name} : ${player.Firstcharacter.Maxhp}/${player.Firstcharacter.hp} `,
+      `| ${player.Firstcharacter.grade}성 ${player.Firstcharacter.name} : ${player.Firstcharacter.Maxhp}/${player.Firstcharacter.hp} `,
     ) +
     chalk.blueBright(
-      `| ${player.Secondcharacter.name} : ${player.Secondcharacter.Maxhp}/${player.Secondcharacter.hp} `,
+      `| ${player.Secondcharacter.grade}성 ${player.Secondcharacter.name} : ${player.Secondcharacter.Maxhp}/${player.Secondcharacter.hp} `,
     ) +
     chalk.blueBright(
-      `| ${player.Thirdcharacter.name} : ${player.Thirdcharacter.Maxhp}/${player.Thirdcharacter.hp} `,
+      `| ${player.Thirdcharacter.grade}성 ${player.Thirdcharacter.name} : ${player.Thirdcharacter.Maxhp}/${player.Thirdcharacter.hp} `,
     ) +
     chalk.redBright(
       `| ${monster.name}Lv${stage} : ${monster.Maxhp}/${monster.hp}|`,
