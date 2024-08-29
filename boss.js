@@ -93,7 +93,7 @@ export class Boss3 {
         this.hp = 180 + stage * 70;
         this.skillcool = 800;
         this.BattletimeUse = -400;
-        this.attackpower = 9 + stage * 3.5;
+        this.attackpower = 9 + stage * 4;
     }
 
 
