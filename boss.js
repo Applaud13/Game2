@@ -28,7 +28,7 @@ export class Boss1 {
             let Target = player.Thirdcharacter;
             if (player.Firstcharacter.hp > 0) {
                 Target = player.Firstcharacter;
-                if (Target.Bufftime) {
+                if (Target.Bufftime>0) {
                     Deal = Math.floor(Deal * 0.5);
                 }
             } else if (player.Secondcharacter.hp > 0) {
@@ -70,7 +70,7 @@ export class Boss2 {
             let Target = player.Thirdcharacter;
             if (player.Firstcharacter.hp > 0) {
                 Target = player.Firstcharacter;
-                if (Target.Bufftime) {
+                if (Target.Bufftime>0) {
                     Deal = Math.floor(Deal * 0.5);
                 }
             } else if (player.Secondcharacter.hp > 0) {
@@ -109,7 +109,7 @@ export class Boss3 {
 
 
             // 최종 공격 실행
-            player.Firstcharacter.Bufftime ? player.Firstcharacter.hp -= Math.floor(Deal/2) : player.Firstcharacter.hp -= Deal;
+            player.Firstcharacter.Bufftime>0 ? player.Firstcharacter.hp -= Math.floor(Deal/2) : player.Firstcharacter.hp -= Deal;
             player.Secondcharacter.hp -= Deal;
             player.Thirdcharacter.hp -= Deal;
             logs.push(`${chalk.red(`${this.name}`)}이 멸망의 파도를 사용하여 ${chalk.blue(`아군 모두`)}에게 ${chalk.red(`${Deal}`)}의 피해를 입혔습니다.`);

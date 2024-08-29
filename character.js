@@ -48,7 +48,7 @@ export class Tanker1 {
             // 스킬 효과
             this.BattletimeUse += this.skillcool;
             const Deal = Math.ceil((0.8 + (Math.random() * 0.4)) * this.attackpower);
-            this.Bufftime = 3000;
+            this.Bufftime = 3500;
             monster.hp -= Deal;
             logs.push(`${chalk.blue(`${this.name}`)}가 ${chalk.blue(`신성한 축복`)}을 시전하여 ${chalk.red(`${monster.name}`)}에게 ${chalk.red(`${Deal}`)}의 피해를 입히고 ${chalk.green(`${this.Bufftime / 1000}`)}초 동안 본인이 받는피해가 반으로 줄어듭니다!!`);
         }
